@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 1目标类 -->
+    <bean id="userDao" class="com.itheima.jdk.UserDaoImpl"/>
+ 	<!-- 2切面 -->
+ 	<bean id="myAspect" class="com.itheima.aspectj.xml.MyAspect"/>
+ 	<!-- 3 aop编程 -->
+ 	<aop:config>
+ 		<!-- 配置切面 -->
+ 		<aop:aspect ref="myAspect">
+ 			<!-- 3.1 配置切入点，通知最后增强哪些方法 -->
+ 			<aop:pointcut expression="execution(* com.itheima.jdk.*.*(..))" id="myPointCut"/>
+ 			<!-- 3.2 关联通知Adivce和切入点pointCut -->
+ 			<!-- 3.2.1 前置通知 -->
+ 			<aop:before method="myBefore" pointcut-ref="myPointCut"/>
+ 			<!-- 3.2.2 后置通知，在方法返回之后执行，就可以获得返回值returning属性：用于设置后置通知的第二个参数的名称，类型是Object -->
+ 			<aop:after-returning method="myAfterReturning" pointcut-ref="myPointCut" returning="returnVal"/>
+ 			<!-- 3.2.1环绕通知 -->
+ 			<aop:around method="myAround" pointcut-ref="myPointCut"/>
+ 			<aop:after-throwing method="myAfterThrowing" pointcut-ref="myPointCut" throwing="e"/>
+ 			<aop:after method="myAfter" pointcut-ref="myPointCut"/>
+ 		</aop:aspect>
+ 	</aop:config>
+    
+
+    <!-- more bean definitions go here -->
+
+</beans>
